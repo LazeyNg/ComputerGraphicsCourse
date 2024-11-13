@@ -284,7 +284,7 @@ int main(int argc, char* argv[])
 		// Task 1: Uncomment the call to gui below to show the GUI
 		///////////////////////////////////////////////////////////////////////////
 		// Then render overlay GUI.
-		// gui();
+		gui();
 
 		// Render the GUI.
 		ImGui::Render();
