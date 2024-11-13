@@ -78,10 +78,14 @@ void initialize()
 	// Define the colors for each of the three vertices of the triangle
 	const float colors[] = {
 		//   R     G     B
-		1.0f, 1.0f, 1.0f, // White
-		1.0f, 1.0f, 1.0f, // White
-		1.0f, 1.0f, 1.0f  // White
+		//1.0f, 1.0f, 1.0f, // White
+		//1.0f, 1.0f, 1.0f, // White
+		//1.0f, 1.0f, 1.0f  // White
+		0.7f, 1.0f, 0.0f,
+		1.0f, 0.1f, 0.9f,
+		0.5f, 0.5f, 1.0f
 	};
+
 	// Create a handle for the vertex color buffer
 	GLuint colorBuffer;
 	glGenBuffers(1, &colorBuffer);
