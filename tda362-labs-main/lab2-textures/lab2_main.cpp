@@ -47,6 +47,9 @@ GLuint positionBuffer, colorBuffer, indexBuffer, vertexArrayObject;
 GLuint texcoordsBuffer;
 GLuint texture;
 
+GLuint positionBuffer2, indexBuffer2, vertexArrayObject2;
+GLuint texcoordsBuffer2;
+GLuint texture2;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// This function is called once at the start of the program and never again
@@ -150,6 +153,59 @@ void initialize()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16.0f);
+
+	// Task 7
+	glGenVertexArrays(1, &vertexArrayObject2);
+	glBindVertexArray(vertexArrayObject2);
+
+	const float positions2[] = {
+		// X      Y       Z
+		2.0f,  0.0f,  -20.0f, // v0
+		2.0f,  10.0f, -20.0f, // v1
+		12.0f, 10.0f, -20.0f, // v2
+		12.0f, 0.0f,  -20.0f  // v3
+	};
+	glGenBuffers(1, &positionBuffer2);
+	glBindBuffer(GL_ARRAY_BUFFER, positionBuffer2);
+	glBufferData(GL_ARRAY_BUFFER, labhelper::array_length(positions2) * sizeof(float), positions2, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, false /*normalized*/, 0 /*stride*/, 0 /*offset*/);
+	glEnableVertexAttribArray(0);
+
+	float texcoords2[] = {
+		0.0f, 0.0f,    // (u,v) for v0
+		0.0f, 1.0f,   // (u,v) for v1
+		1.0f, 1.0f,   // (u,v) for v2
+		1.0f, 0.0f     // (u,v) for v3
+	};
+
+	glGenBuffers(1, &texcoordsBuffer2);
+	glBindBuffer(GL_ARRAY_BUFFER, texcoordsBuffer2);
+	glBufferData(GL_ARRAY_BUFFER, labhelper::array_length(texcoords2) * sizeof(float), texcoords2, GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 2, GL_FLOAT, false/*normalized*/, 0/*stride*/, 0/*offset*/);
+	glEnableVertexAttribArray(1);
+
+	const int indices2[] = {
+		0, 1, 3, // Triangle 1
+		1, 2, 3  // Triangle 2
+	};
+	glGenBuffers(1, &indexBuffer2);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer2);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, labhelper::array_length(indices2) * sizeof(float), indices2,
+		GL_STATIC_DRAW);
+
+	int w2, h2, comp2;
+	unsigned char* image2 = stbi_load("../scenes/textures/explosion.png", &w2, &h2, &comp2, STBI_rgb_alpha);
+
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w2, h2, 0, GL_RGBA, GL_UNSIGNED_BYTE, image2);
+	free(image2);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
 
@@ -198,6 +254,13 @@ void display(void)
 	glBindVertexArray(vertexArrayObject);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+	// Task 7
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	glBindVertexArray(vertexArrayObject2);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDisable(GL_BLEND);
 
 	glUseProgram(0); // "unsets" the current shader program. Not really necessary.
 }
@@ -208,6 +271,8 @@ void display(void)
 ///////////////////////////////////////////////////////////////////////////////
 void gui()
 {
+	glBindTexture(GL_TEXTURE_2D, texture);
+
 	// ----------------- Set variables --------------------------
 	ImGui::PushID("mag");
 	ImGui::Text("Magnification");
@@ -237,24 +302,24 @@ void gui()
 
 	switch (mini)
 	{
-	case 0:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		break;
-	case 1:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		break;
-	case 2:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-		break;
-	case 3:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-		break;
-	case 4:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-		break;
-	case 5:
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		break;
+		case 0:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			break;
+		case 1:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			break;
+		case 2:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+			break;
+		case 3:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+			break;
+		case 4:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+			break;
+		case 5:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+			break;
 	}
 
 	ImGui::SliderFloat("Anisotropic filtering", &anisotropy, 1.0, 16.0, "Number of samples: %.0f");
