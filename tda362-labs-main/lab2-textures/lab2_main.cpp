@@ -110,8 +110,8 @@ void initialize()
 	// Create the element array buffer object
 	///////////////////////////////////////////////////////////////////////////
 	const int indices[] = {
-		0, 1, 3, // Triangle 1
-		1, 2, 3  // Triangle 2
+		3, 1, 0, // Triangle 1
+		3, 2, 1  // Triangle 2
 	};
 	glGenBuffers(1, &indexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -185,8 +185,8 @@ void initialize()
 	glEnableVertexAttribArray(1);
 
 	const int indices2[] = {
-		0, 1, 3, // Triangle 1
-		1, 2, 3  // Triangle 2
+		3, 1, 0, // Triangle 1
+		3, 2, 1  // Triangle 2
 	};
 	glGenBuffers(1, &indexBuffer2);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer2);
@@ -228,7 +228,8 @@ void display(void)
 
 	// We disable backface culling for this tutorial, otherwise care must be taken with the winding order
 	// of the vertices. It is however a lot faster to enable culling when drawing large scenes.
-	glDisable(GL_CULL_FACE); //glEnable(GL_CULL_FACE);
+	// glDisable(GL_CULL_FACE); 
+	glEnable(GL_CULL_FACE);
 	// Disable depth testing
 	glDisable(GL_DEPTH_TEST);
 	// Set the shader program to use for this draw call
