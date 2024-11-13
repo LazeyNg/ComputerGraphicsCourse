@@ -215,6 +215,16 @@ void gui()
 	ImGui::RadioButton("GL_LINEAR", &mag, 1);
 	ImGui::PopID();
 
+	switch (mag) 
+	{
+		case 0:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			break;
+		case 1:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			break;
+	}
+
 	ImGui::PushID("mini");
 	ImGui::Text("Minification");
 	ImGui::RadioButton("GL_NEAREST", &mini, 0);
@@ -224,6 +234,28 @@ void gui()
 	ImGui::RadioButton("GL_LINEAR_MIPMAP_NEAREST", &mini, 4);
 	ImGui::RadioButton("GL_LINEAR_MIPMAP_LINEAR", &mini, 5);
 	ImGui::PopID();
+
+	switch (mini)
+	{
+	case 0:
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		break;
+	case 1:
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		break;
+	case 2:
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+		break;
+	case 3:
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+		break;
+	case 4:
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+		break;
+	case 5:
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		break;
+	}
 
 	ImGui::SliderFloat("Anisotropic filtering", &anisotropy, 1.0, 16.0, "Number of samples: %.0f");
 	ImGui::Dummy({ 0, 20 });
