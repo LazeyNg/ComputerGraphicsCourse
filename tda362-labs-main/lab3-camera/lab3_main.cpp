@@ -181,7 +181,7 @@ void display()
 
 	// Ground
 	// Task 5: Uncomment this
-	//drawGround(modelViewProjectionMatrix);
+	drawGround(modelViewProjectionMatrix);
 
 	// car
 	modelViewProjectionMatrix = projectionMatrix * viewMatrix * carModelMatrix;
@@ -293,6 +293,23 @@ bool handleEvents(void)
 	}
 
 	carModelMatrix = T * R;
+
+	if (state[SDL_SCANCODE_W])
+	{
+		cameraPosition += cameraDirection * speed * deltaTime;
+	}
+	if (state[SDL_SCANCODE_S])
+	{
+		cameraPosition -= cameraDirection * speed * deltaTime;
+	}
+	if (state[SDL_SCANCODE_A])
+	{
+		cameraPosition -= normalize(cross(cameraDirection, worldUp)) * speed * deltaTime;
+	}
+	if (state[SDL_SCANCODE_D])
+	{
+		cameraPosition += normalize(cross(cameraDirection, worldUp)) * speed * deltaTime;
+	}
 
 	return quitEvent;
 }
