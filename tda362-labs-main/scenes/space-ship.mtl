@@ -162,7 +162,7 @@ Tf 0 0 0
 Ni 1.45
 
 newmtl side-engine-exhaust
-Kd 0 0 0
+Kd 1 0.99999 0.99999
 Ks 0 0 0
 Pm 0
 Pr 0
