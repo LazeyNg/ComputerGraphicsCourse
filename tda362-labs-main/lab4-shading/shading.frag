@@ -91,11 +91,14 @@ vec3 calculateDirectIllumiunation(vec3 wo, vec3 n, vec3 base_color)
 	float denominator = 4.0 * clamp(n_dot_wo * wi_dot_n, 0.0001, 1.0);
 	float brdf = D * F * G / denominator;
 
-	return brdf * dot(n, wi) * Li; 
+	// return brdf * dot(n, wi) * Li; 
 	///////////////////////////////////////////////////////////////////////////
 	// Task 3 - Make your shader respect the parameters of our material model.
 	///////////////////////////////////////////////////////////////////////////
-
+	vec3 dielectric_term = brdf * wi_dot_n * Li + (1.0 - F) * diffuse_term;
+	vec3 metal_term = brdf * base_color * wi_dot_n * Li;
+	vec3 microfacet_term = material_metalness * metal_term + (1.0 - material_metalness) * dielectric_term;
+	return microfacet_term;
 	// return direct_illum;
 }
 
