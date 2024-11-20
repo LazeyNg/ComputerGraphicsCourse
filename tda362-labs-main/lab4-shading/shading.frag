@@ -97,9 +97,8 @@ vec3 calculateDirectIllumiunation(vec3 wo, vec3 n, vec3 base_color)
 	///////////////////////////////////////////////////////////////////////////
 	vec3 dielectric_term = brdf * wi_dot_n * Li + (1.0 - F) * diffuse_term;
 	vec3 metal_term = brdf * base_color * wi_dot_n * Li;
-	vec3 microfacet_term = material_metalness * metal_term + (1.0 - material_metalness) * dielectric_term;
-	return microfacet_term;
-	// return direct_illum;
+	direct_illum = material_metalness * metal_term + (1.0 - material_metalness) * dielectric_term;
+	return direct_illum;
 }
 
 vec3 calculateIndirectIllumination(vec3 wo, vec3 n, vec3 base_color)
