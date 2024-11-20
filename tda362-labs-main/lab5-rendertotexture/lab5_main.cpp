@@ -256,6 +256,7 @@ void initialize()
 }
 
 
+
 ///////////////////////////////////////////////////////////////////////////////
 /// This function is used to draw the main objects on the scene
 ///////////////////////////////////////////////////////////////////////////////
@@ -400,9 +401,16 @@ void display()
 	// 2. Set postFxShader as active
 	glUseProgram(postFxShader);
 
+	
+
 	// 3. Bind the framebuffer to texture unit 0
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, camFB.colorTextureTarget);
+
+	// Task 4
+	labhelper::setUniformSlow(postFxShader, "time", currentTime);
+	labhelper::setUniformSlow(postFxShader, "currentEffect", currentEffect);
+	labhelper::setUniformSlow(postFxShader, "filterSize", filterSizes[filterSize - 1]);
 
 	// 4. Draw a quad over the entire viewport
 	labhelper::drawFullScreenQuad();
