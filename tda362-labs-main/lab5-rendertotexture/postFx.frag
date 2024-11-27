@@ -8,8 +8,10 @@ layout(binding = 1) uniform sampler2D blurredFrameBufferTexture;
 uniform float time = 0.f;
 uniform int currentEffect = 1; // 1 as default, to know when the framebuffers are properly set
 uniform int filterSize = 1;
-layout(location = 0) out vec4 fragmentColor;
+uniform int mosaicSize = 20;
+uniform float blurSpeed = 1;
 
+layout(location = 0) out vec4 fragmentColor;
 
 /**
 * Helper function to sample with pixel coordinates, e.g., (511.5, 12.75)
@@ -48,7 +50,12 @@ vec3 grayscale(vec3 rgbSample);
 vec3 toSepiaTone(vec3 rgbSample);
 
 
-
+// Mosaic
+vec2 mosaic(vec2 pixelPosition)
+{
+	return floor(pixelPosition / mosaicSize) * mosaicSize + 1; 
+	// return pixelPosition - mod(pixelPosition, mosaicSize) + 1;
+}
 
 void main()
 {
@@ -74,7 +81,8 @@ void main()
 		fragmentColor = vec4(toSepiaTone(blur(mushrooms(gl_FragCoord.xy))), 1.0);
 		break;
 	case 6:
-		fragmentColor = vec4(0.0); // place holder
+		//fragmentColor = vec4(0.0); // place holder
+		fragmentColor = textureRect(frameBufferTexture, mosaic(gl_FragCoord.xy));;
 		break;
 	case 7:
 		fragmentColor = vec4(0.0); // place holder
@@ -120,6 +128,7 @@ vec2 mushrooms(vec2 inCoord)
 vec3 blur(vec2 coord)
 {
 	vec3 result = vec3(0.0);
+
 	float weight = 1.0 / (filterSize * filterSize);
 
 	for(float i = -filterSize / 2; i <= filterSize / 2; i += 1.0)
