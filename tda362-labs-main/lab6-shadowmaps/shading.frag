@@ -1,5 +1,5 @@
 #version 420
-
+#define SOLUTION_USE_BUILTIN_SHADOW_TEST 1
 // required by GLSL spec Sect 4.5.3 (though nvidia does not, amd does)
 precision highp float;
 
