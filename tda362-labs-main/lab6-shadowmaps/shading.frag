@@ -42,6 +42,7 @@ uniform float point_light_intensity_multiplier = 50.0;
 in vec2 texCoord;
 in vec3 viewSpaceNormal;
 in vec3 viewSpacePosition;
+in vec4 shadowMapCoord;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Input uniform variables
@@ -166,7 +167,8 @@ void main()
 	float visibility = 1.0;
 	float attenuation = 1.0;
 
-	vec4 shadowMapCoord = lightMatrix * vec4(viewSpacePosition, 1.0);
+	// vec4 shadowMapCoord = lightMatrix * vec4(viewSpacePosition, 1.0);
+
 	#if SOLUTION_USE_BUILTIN_SHADOW_TEST // SOLUTION_CODE >= 8
 		visibility = textureProj(shadowMapTex, shadowMapCoord);
 	#else
